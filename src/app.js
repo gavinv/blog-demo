@@ -15,6 +15,18 @@ app.get("/categories", async (_req, res) => {
   res.json({ categories });
 });
 
+app.get("/posts", async (_req, res) => {
+  const posts = await Post.findAll({
+    attributes: ["slug", "title", "description", "viewCount", "createdAt", "categoryId"],
+    include: [
+      { model: Category, as: "category", attributes: ["id", "name"] },
+      { model: Tag, as: "tagLists", attributes: ["name"], through: { attributes: [] } },
+    ],
+    order: [["createdAt", "DESC"]],
+  });
+  res.json({ posts });
+});
+
 app.post("/posts", async (req, res) => {
   const { title, description, body, categoryId, tagList = [] } = req.body.post || req.body;
   if (!title || !body) return res.status(400).json({ error: "title and body required" });
@@ -37,7 +49,6 @@ app.post("/posts", async (req, res) => {
 
   res.status(201).json({ post: full });
 });
-
 
 app.get("/posts/:slug", async (req, res) => {
   const post = await Post.findOne({
