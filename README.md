@@ -1,25 +1,30 @@
-# Generic Blog Demo (Categories + Recommendations)
+# Generic Blog Demo (Posts w/ Categories + Recommendations)
 
-**Purpose:** neutral, copy-safe demo showing:
+📹 [Loom Demo](https://www.loom.com/share/e76701cd198e4aab876ad3d233a06780?sid=d5bd796d-58ee-4ff4-a6c2-6f5c6479c0b9)
 
-- Categories (`Category`, `Post.categoryId`)
-- `GET /categories`
-- Create post with `categoryId` + `tagList`
-- `GET /posts/:slug` (includes `category`, `tagLists`, `viewCount`)
-- Increment views: `POST /posts/:slug/viewed`
-- Recommendations: `GET /posts/:slug/recommendations` (same category/tag overlap; sorted by `viewCount`)
+**Endpoints**
+
+- `GET /categories` — list categories
+- `GET /posts/:slug` — includes `category`, `tagLists`, `viewCount`
+- `POST /posts/:slug/viewed` — atomic increment
+- `GET /posts/:slug/recommendations` — same category or tag overlap, sorted by `viewCount`
+- `POST /posts` — accepts `{ post: { title, body, categoryId, tagList[] } }`
 
 ## Run
 
+```bash
 npm i
-npm run dev
+npm run dev   # seeds SQLite and starts on :3001
+```
 
 ## Try it
 
-curl localhost:3001/categories
-curl localhost:3001/posts/dolor-sit-amet-basics
-curl -X POST localhost:3001/posts/dolor-sit-amet-basics/viewed
-curl localhost:3001/posts/dolor-sit-amet-basics/recommendations
+```bash
+curl -s localhost:3001/categories
+curl -s localhost:3001/posts/dolor-sit-amet-basics
+curl -s -X POST localhost:3001/posts/dolor-sit-amet-basics/viewed
+curl -s localhost:3001/posts/dolor-sit-amet-basics/recommendations
+```
 
 ## Notes
 
